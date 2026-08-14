@@ -5,10 +5,25 @@ param(
 $ErrorActionPreference = 'Stop'
 
 $source = Join-Path $PSScriptRoot 'bin\Release\net6.0\NevarisDamageMeter.dll'
-$pluginDirectory = Join-Path $GameDir 'BepInEx\plugins\DamageMeter'
+$pluginRoot = Join-Path $GameDir 'BepInEx\plugins'
+$pluginDirectory = Join-Path $pluginRoot 'DamageMeter'
 $target = Join-Path $pluginDirectory 'NevarisDamageMeter.dll'
 $backupDirectory = Join-Path $GameDir 'BepInEx\mod-backups\DamageMeter'
 $config = Join-Path $GameDir 'BepInEx\config\alex.nevaris.damagemeter.cfg'
+
+$existingTargets = @(@(
+    $target
+    (Join-Path $pluginRoot 'NevarisDamageMeter.dll')
+    (Join-Path $pluginRoot 'NevarisDamageMeter.dll\NevarisDamageMeter.dll')
+) | Where-Object { Test-Path -LiteralPath $_ -PathType Leaf })
+
+if ($existingTargets.Count -gt 1) {
+    throw "Multiple Damage Meter installations were found: $($existingTargets -join ', ')"
+}
+if ($existingTargets.Count -eq 1) {
+    $target = $existingTargets[0]
+    $pluginDirectory = Split-Path -Parent $target
+}
 
 if (-not (Test-Path -LiteralPath $source -PathType Leaf)) {
     throw "Release DLL not found at '$source'. Build the project first."

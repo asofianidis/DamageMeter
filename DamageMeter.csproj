@@ -10,6 +10,8 @@
     <GameDir Condition="'$(GameDir)' == ''">F:\SteamLibrary\steamapps\common\SpiritVale</GameDir>
     <InteropDir>$(GameDir)\BepInEx\interop</InteropDir>
     <BepInExCoreDir>$(GameDir)\BepInEx\core</BepInExCoreDir>
+    <ModConfigMenuPath Condition="Exists('$(GameDir)\BepInEx\plugins\ModConfigMenu\SpiritVale.ModConfigMenu.dll')">$(GameDir)\BepInEx\plugins\ModConfigMenu\SpiritVale.ModConfigMenu.dll</ModConfigMenuPath>
+    <ModConfigMenuPath Condition="'$(ModConfigMenuPath)' == '' and Exists('$(GameDir)\BepInEx\plugins\SpiritVale.ModConfigMenu.dll\SpiritVale.ModConfigMenu.dll')">$(GameDir)\BepInEx\plugins\SpiritVale.ModConfigMenu.dll\SpiritVale.ModConfigMenu.dll</ModConfigMenuPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,7 +24,7 @@
       <Private>false</Private>
     </Reference>
     <Reference Include="SpiritVale.ModConfigMenu">
-      <HintPath>$(GameDir)\BepInEx\plugins\ModConfigMenu\SpiritVale.ModConfigMenu.dll</HintPath>
+      <HintPath>$(ModConfigMenuPath)</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="0Harmony">

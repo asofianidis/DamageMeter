@@ -418,6 +418,8 @@ internal static class MeterController
             Plugin.Settings.UiScale.Value, MinimumUserScale, MaximumUserScale);
         _background = _panelObject.AddComponent<Image>();
         _background.color = new Color(0.035f, 0.045f, 0.06f, 0.94f);
+        Mask panelMask = _panelObject.AddComponent<Mask>();
+        panelMask.showMaskGraphic = true;
         Outline outline = _panelObject.AddComponent<Outline>();
         outline.effectColor = new Color(0.68f, 0.54f, 0.28f, 0.7f);
         outline.effectDistance = new Vector2(1f, -1f);
