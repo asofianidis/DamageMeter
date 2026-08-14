@@ -32,8 +32,8 @@ internal static class McmIntegration
 
         page.AddHeader("DISPLAY");
         page.BindFloatSlider(Plugin.Settings.UiScale, "Meter scale",
-            0.55f, 1.25f, 0.05f, "0.00x",
-            "Resize the meter while preserving its aspect ratio.",
+            MeterController.MinimumUserScale, 1.25f, 0.05f, "0.00x",
+            "Resize the meter while preserving its aspect ratio and readable text.",
             _ => MeterController.ApplyConfiguredScale());
 
         page.AddHeader("ACTIONS");

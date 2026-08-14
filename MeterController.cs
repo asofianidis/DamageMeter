@@ -16,9 +16,8 @@ internal static class MeterController
 {
     private const float PanelWidth = 360f;
     private const float PanelHeight = 244f;
-    private const float MinimumUserScale = 0.55f;
+    internal const float MinimumUserScale = 0.7f;
     private const float MaximumUserScale = 1.25f;
-    private const float MinimumAutoFitScale = 0.35f;
     private const int DetailVisibleEntries = 8;
     private static readonly Dictionary<int, MeterRow> Rows = new();
     private static readonly Dictionary<string, string> DamageSourceNames =
@@ -60,7 +59,14 @@ internal static class MeterController
     private static int? _selectedPlayerId;
     private static int _detailScrollOffset;
 
-    internal static void Initialize() => _visible = Plugin.Settings.StartVisible.Value;
+    internal static void Initialize()
+    {
+        _visible = Plugin.Settings.StartVisible.Value;
+        _preferredUiScale = Mathf.Clamp(
+            Plugin.Settings.UiScale.Value, MinimumUserScale, MaximumUserScale);
+        if (!Mathf.Approximately(Plugin.Settings.UiScale.Value, _preferredUiScale))
+            Plugin.Settings.UiScale.Value = _preferredUiScale;
+    }
 
     internal static void ResetEncounter() => Reset();
 
@@ -895,7 +901,9 @@ internal static class MeterController
         float availableHeight = Mathf.Max(1f, Screen.height / canvasScale - 16f);
         float fitScale = Mathf.Min(availableWidth / PanelWidth, availableHeight / PanelHeight);
         float effectiveScale = Mathf.Min(_preferredUiScale, fitScale);
-        effectiveScale = Mathf.Clamp(effectiveScale, MinimumAutoFitScale, MaximumUserScale);
+        // Smaller scales reduce the compact 9 px labels below a stable size for
+        // the game's TextMesh Pro atlas and produce visible glyph artifacts.
+        effectiveScale = Mathf.Clamp(effectiveScale, MinimumUserScale, MaximumUserScale);
         _panelRect.localScale = new Vector3(effectiveScale, effectiveScale, 1f);
         _lastScreenWidth = Screen.width;
         _lastScreenHeight = Screen.height;
