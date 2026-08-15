@@ -340,8 +340,12 @@ internal static class MeterController
             if (string.IsNullOrWhiteSpace(playerId))
                 return false;
 
-            return local.CurrentParty.HasMember(playerId)
-                && local.IsInMyParty(player);
+            // CurrentParty is delivered by a TargetRpc, so only the locally
+            // owned PlayerController is guaranteed to have it on this client.
+            // Remote party members must be validated against the local
+            // player's authoritative party roster instead of asking the
+            // remote controller to expose its own CurrentParty instance.
+            return local.CurrentParty.HasMember(playerId);
         }
         catch
         {

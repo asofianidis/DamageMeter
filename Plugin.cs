@@ -16,7 +16,7 @@ public sealed class Plugin : BasePlugin
 {
     public const string Guid = "alex.nevaris.damagemeter";
     public const string Name = "Damage Meter";
-    public const string Version = "1.3.0";
+    public const string Version = "1.3.1";
 
     internal static ManualLogSource Logger = null!;
     internal static MeterSettings Settings = null!;
